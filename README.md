@@ -12,19 +12,19 @@ Reading a live Twitter stream, cleansing and transforming the data, applying a b
 ![Diagram](https://raw.githubusercontent.com/fmunz/dlt-l300/main/twitterstream.jpg)
 -->
 
-## 🤔💡What it consists of 
+## 🤔 What it consists of 
 ✅ **[Tweepy](https://www.tweepy.org/)** 
 
 I use Tweepy for ingesting live Twitter data. The ingested Twitter data is streamed to an S3 bucket (imagine this as your data lake). With Databricks I can use DBFS to abstract the cloud object store as a folder (this is multicloud, it will for ADFS2 and GCS too)  
 
-✅ **Databricks Delta Live Tables** 
+✅ **Databricks Delta Live Tables in SQL with Autoloader** 
 
 What matters is the "P" in DLT. "P" for "pipeline". In this example DLT is used together with Databricks Autoloader. Autoloader ingests streaming data and detects the schema. DLT creates a Bronze table for the raw data, then filters the over 40 columns and cleans the data to ensure only tweets in English are contained using SQL constraints (we like to call them Expectations in DLT lingo).   
 
 
 ✅ **Hugging Face Sentiment Analysis**
 
-For sentiment analysis, I picked Hugging Face because I could. The Databricks platform is open and flexible. It doesn't get much easier than using a pretrained language model that is even optized for tweets (it detects :-), 😀, 🥲 and so on). 
+For sentiment analysis, I picked Hugging Face because I could (the Databricks platform is open and flexible, any ML will work). It doesn't get much easier than using a pretrained Hugging Face language model that is even optized for tweets (it detects :-), 😀, 🥲 and so on). 
 
 
 ✅ **Databricks Workflow**
