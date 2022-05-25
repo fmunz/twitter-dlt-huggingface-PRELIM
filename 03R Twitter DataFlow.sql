@@ -6,7 +6,7 @@
 
 -- MAGIC %md
 -- MAGIC 
--- MAGIC ![Twitter Architecture Diagram](markup/twitterstream.jpeg)
+-- MAGIC ![Twitter Architecture Diagram](https://github.com/fmunz/dlt-l300/blob/main/twitterstream.png?raw=true)
 
 -- COMMAND ----------
 
@@ -34,7 +34,7 @@ AS SELECT * FROM cloud_files(
 
 -- COMMAND ----------
 
-create or replace  streaming live table silver 
+create or replace   live table silver 
 
 (constraint valid_language expect (lang == "en") on violation drop row,
 constraint valid_id expect (id != "") on violation drop row)
@@ -43,7 +43,7 @@ comment 'data is cleansed - other languages than EN are dropped'
 
 
 as
-  select id, geo, lang, text from stream (live.bronze)
+  select id, geo, lang, text from  (live.bronze)
 
 -- COMMAND ----------
 
