@@ -42,20 +42,20 @@ For a much more advanced discussion of [Hugging Face with Databricks see the thi
 If you have see a recording of this demo, you will understand how I struggle to switch between the different notebooks for the Twitter Stream, DLT, and ML. Of course this needs to be automated. I am using Databricks Workflows for this and simply create three tasks: one for ingestion with the notebook that is using Tweepy, one task that runs the DLT pipeline, and a third task for the sentiment analysis. This is a workflow example that uses different task types, such as Python notebooks and DLT pipelines. 
 <img src="https://github.com/fmunz/twitter-dlt-huggingface/blob/main/markup/matrix.jpg?raw=true" width="800">
 
-Interested in built-in, no-cost orchestration for the Lakehouse? Watch this demo about [Workflows](https://www.youtube.com/watch?v=H2FS4ijpFZA)
+So if the Workflow is not part of this repository, how can you create your own workflow? Watch this demo about [Databricks Workflows](https://www.youtube.com/watch?v=H2FS4ijpFZA) to get started.
 
 
 
 ## Run the Demo 🚀 yourself
 ### 🐑 Clone the Repo
-Use [Databricks Repos](https://docs.databricks.com/repos/index.html#clone-a-remote-git-repository) to clone the repo and get started with this demo. The repo consists of the notebooks listed above. The workflow is not part of the repo. 
+Use [Databricks Repos](https://docs.databricks.com/repos/index.html#clone-a-remote-git-repository) from your workspace to clone the repo and get started with this demo. The repo consists of the notebooks listed above. The workflow is not part of the repo.
 
 ### Requirements
 
 * Since the data is streamed live from twitter you have to create Twitter credentials. Ideally you should store them as a Databricks secret and read the from the Twitter-Stream-S3 notebook. Since I experiment a lot with my demo, I added the credentials directly but externalized this step into a separate notebook that is not on githuib, to keep the code simple. 
-* Create a directory in DBFS. The helper functions that I use are at the bottom of the Twitter-Stream-S3 notebook. 
-* Define the Tweepy search expression to something that you enjoy. Note for the sake of this demo I include Spanish and German tweets (I use this to explain the Delta Live Table expectations)
-* You can stop the data collection at any time. The code will work with old tweets from the DBFS directory. 
+* Create a directory in DBFS to store the streamed tweets. The helper functions that I use for that are at the bottom of the Twitter-Stream-S3 notebook. 
+* Define the Tweepy search expression to something that you enjoy. Note for the sake of this demo I include Spanish and German tweets. Later I use Delta Live Table expectations to ensure the ML pipeline will only work with EN tweets.
+* You can stop the data collection at any time if you like. The code will work with old tweets from the DBFS directory. 
 
 
 ### DBR Version
@@ -65,5 +65,5 @@ The features used in the notebooks were tested on DBR 10.1 ML. Make sure to use 
 
 ### 🤝 Feedback and contributing
 
-* I am happy to accept pull requests but please keep in mind that the focus of this demo is DLT and simplicity. So I am not looking for more complexity in the ingestion or ML part, however I appreciate some more cool visualizations of the final data. 
+* I am happy to accept pull requests but please keep in mind that the focus of this demo is on DLT and simplicity. So I am not looking for more complexity in the ingestion or ML part, however I'd appreciate some cool visualizations of the final data. 
 * A friend of mine, [Srijith](https://www.linkedin.com/in/srijith-rajamohan-ph-d-4242b9a/) provided a very first version of the Tweepy code. Some design ideas of this page are adapted from @pyr0gan's README. 
