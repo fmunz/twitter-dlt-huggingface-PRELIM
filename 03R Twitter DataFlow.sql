@@ -6,14 +6,14 @@
 
 -- MAGIC %md
 -- MAGIC 
--- MAGIC ![Twitter Architecture Diagram](https://github.com/fmunz/dlt-l300/blob/main/twitterstream.png?raw=true)
+-- MAGIC ![Twitter Architecture Diagram](https://github.com/fmunz/twitter-dlt-huggingface/blob/main/markup/twitterstream.jpeg?raw=true)
 
 -- COMMAND ----------
 
 -- MAGIC %md
--- MAGIC * [Twitter Stream](https://data-ai-lakehouse.cloud.databricks.com/?o=2847375137997282#notebook/124654004282750)
--- MAGIC * [Pipeline](https://data-ai-lakehouse.cloud.databricks.com/?o=2847375137997282#joblist/pipelines/267b91c1-52f0-49e3-8b77-9a50b34f5d39/updates/10b2150e-b0a0-4116-9016-3b2595ea2ab9)
--- MAGIC * [Huggingface Sentiment Analysis](https://data-ai-lakehouse.cloud.databricks.com/?o=2847375137997282#notebook/2328309019401991)
+-- MAGIC * [Twitter Stream S3](https://data-ai-lakehouse.cloud.databricks.com/?o=2847375137997282#notebook/3842290145331493/command/3842290145331494)
+-- MAGIC * [Pipeline](https://data-ai-lakehouse.cloud.databricks.com/?o=2847375137997282#joblist/pipelines/e5a33172-4c5c-459b-ab32-c9f3c720fcac)
+-- MAGIC * [Huggingface Sentiment Analysis](https://data-ai-lakehouse.cloud.databricks.com/?o=2847375137997282#notebook/3842290145331470)
 
 -- COMMAND ----------
 
