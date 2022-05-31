@@ -14,11 +14,11 @@ Reading a live Twitter stream, ingestion with schema detection, cleansing and tr
 
 
 ## The Notebooks / Ingredients
-### 📔 The [Twitter-Stream-S3 notebook](Twitter-Stream-S3.py) uses **[Tweepy](https://www.tweepy.org/)** 👩‍💻
+### 📔 The [Twitter-Stream-S3.py notebook](Twitter-Stream-S3.py) uses **[Tweepy](https://www.tweepy.org/)** 👩‍💻
 
 In this demo, I use Tweepy for ingesting a live Twitter stream based on search criteria that can be be defined, such as "DLT" and "data engineering". The ingested Twitter data is streamed to an S3 bucket. Imagine this S3 bucket as your data lake. With Databricks I can use DBFS to abstract the cloud object store as a folder (DBFS is multicloud, it will work the same on ADFS2 and GCS too)  
 
-### 📔 The [Twitter DataFLow notebook](https://github.com/fmunz/twitter-dlt-huggingface/blob/d0b7ba6d1add98be78e2c3d28428b074646392da/03R+Twitter+DataFlow.sql) uses **[Delta Live Tables](https://databricks.com/product/delta-live-tables) in SQL with Autoloader** 
+### 📔 The [Twitter-Dataflow.sql notebook](Twitter-DataFlow.sql) uses **[Delta Live Tables](https://databricks.com/product/delta-live-tables) in SQL with Autoloader** 
 
 What matters in DLT is the "P". "P" for "pipeline". In this example DLT is used together with Databricks Autoloader. Autoloader ingests streaming data and detects the schema. DLT creates a Bronze table for the raw data, then filters the 40 columns per tweet and cleans the data to ensure only tweets in English are contained. Cleaning data is done with SQL constraints (we like to call them Expectations in DLT lingo).   
 
@@ -27,7 +27,7 @@ What matters in DLT is the "P". "P" for "pipeline". In this example DLT is used 
 
 
 
-### 📔 The [Twitter Sentiment Analysis Notebook](https://github.com/fmunz/twitter-dlt-huggingface/blob/d0b7ba6d1add98be78e2c3d28428b074646392da/03R+Twitter+SentimentAnalysis.py) uses  **Hugging Face Sentiment Analysis Pipelines**
+### 📔 The [Twitter-SentimentAnalysis.py Notebook](Twitter-SentimentAnalysis.py) uses  **Hugging Face Sentiment Analysis Pipelines**
 
 For sentiment analysis, I picked Hugging Face because I could (the Databricks platform is open and flexible, any ML will work). It doesn't get much easier than using a pretrained Hugging Face language model that is even optized for tweets (it detects :-), 😀, 🥲 and so on). The goal here was to show how almost any kind of ML can be used within the Lakehouse with emphasis on simplicity.
 
