@@ -13,7 +13,7 @@ Reading a live Twitter stream, ingestion with schema detection, cleansing and tr
 <img src="https://github.com/fmunz/twitter-dlt-huggingface/blob/main/markup/twitterstream.jpeg?raw=true" width="800">
 
 
-## The Notebooks / Ingredients
+## Ingredients
 ### 📔 The [Twitter-Stream-S3.py notebook](Twitter-Stream-S3.py) uses **[Tweepy](https://www.tweepy.org/)** 👩‍💻
 
 In this demo, I use Tweepy for ingesting a live Twitter stream based on search criteria that can be be defined, such as "DLT" and "data engineering". The ingested Twitter data is streamed to an S3 bucket. Imagine this S3 bucket as your data lake. With Databricks I can use DBFS to abstract the cloud object store as a folder (DBFS is multicloud, it will work the same on ADFS2 and GCS too)  
@@ -46,17 +46,24 @@ Interested in built-in, no-cost orchestration for the Lakehouse? Watch this demo
 
 
 
-## 🐑 Clone this Demo
+## Run the Demo 🚀 yourself
+### 🐑 Clone the Repo
+Use [Databricks Repos](https://docs.databricks.com/repos/index.html#clone-a-remote-git-repository) to clone the repo and get started with this demo. The repo consists of the notebooks listed above. The workflow is not part of the repo. 
+
+### Requirements
+
+* Since the data is streamed live from twitter you have to create Twitter credentials. Ideally you should store them as a Databricks secret and read the from the Twitter-Stream-S3 notebook. Since I experiment a lot with my demo, I added the credentials directly but externalized this step into a separate notebook that is not on githuib, to keep the code simple. 
+* Create a directory in DBFS. The helper functions that I use are at the bottom of the Twitter-Stream-S3 notebook. 
+* Define the Tweepy search expression to something that you enjoy. Note for the sake of this demo I include Spanish and German tweets (I use this to explain the Delta Live Table expectations)
+* You can stop the data collection at any time. The code will work with old tweets from the DBFS directory. 
 
 
-You can use Databricks Projects to clone this repo and get started with this demo, or download the .dbc archive and import the notebooks manually.
-
-## DBR Version
+### DBR Version
 The features used in the notebooks were tested on DBR 10.1 ML. Make sure to use a ML runtime, otherwise the notebook with the Sentiment Analysis will complain about missing libraries (which you could of course install manually, but it is not worth the effort).
 
 
 
 ### 🤝 Feedback and contributing
 
-* I am happy to accept pull requests but please keep in mind that the focus of this demo is DLT and simplicity.
+* I am happy to accept pull requests but please keep in mind that the focus of this demo is DLT and simplicity. So I am not looking for more complexity in the ingestion or ML part, however I appreciate some more cool visualizations of the final data. 
 * A friend of mine, [Srijith](https://www.linkedin.com/in/srijith-rajamohan-ph-d-4242b9a/) provided a very first version of the Tweepy code. Some design ideas of this page are adapted from @pyr0gan's README. 
