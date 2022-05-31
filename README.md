@@ -14,7 +14,7 @@ Reading a live Twitter stream, ingestion with schema detection, cleansing and tr
 
 
 ## The Notebooks / Ingredients
-### 📔 The [TwitterStream to S3 notebook](/fmunz/twitter-dlt-huggingface/blob/03R+TwitterStream+S3.py) uses **[Tweepy](https://www.tweepy.org/)** 👩‍💻
+### 📔 The [TwitterStream to S3 notebook](/03R+TwitterStream+S3.py) uses **[Tweepy](https://www.tweepy.org/)** 👩‍💻
 
 In this demo, I use Tweepy for ingesting a live Twitter stream based on search criteria that can be be defined, such as "DLT" and "data engineering". The ingested Twitter data is streamed to an S3 bucket. Imagine this S3 bucket as your data lake. With Databricks I can use DBFS to abstract the cloud object store as a folder (DBFS is multicloud, it will work the same on ADFS2 and GCS too)  
 
