@@ -74,4 +74,4 @@ optional:
 ### 🤝 Feedback and contributing
 
 * I am happy to accept pull requests but please keep in mind that the focus of this demo is on DLT and simplicity. So I am not looking for more complexity in the ingestion or ML part, however I'd appreciate some cool visualizations of the final data. 
-* A friend of mine, [Srijith](https://www.linkedin.com/in/srijith-rajamohan-ph-d-4242b9a/) provided a very first version of the Tweepy code. Some design ideas of this page are adapted from @pyr0gan's README. 
+* A friend of mine, [Srijith](https://www.linkedin.com/in/srijith-rajamohan-ph-d-4242b9a/) provided a very first version of the Tweepy code. 
