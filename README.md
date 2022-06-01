@@ -64,7 +64,7 @@ The features used in the notebooks were tested on DBR 10.1 ML. Make sure to use 
 
 ### 🚀 Running the demo 
 * Run the notebook that ingests data from Twitter, or make sure you have tweets to process
-* Trigger the DLT pipeline. Although the pipeline is defined in a SQL notebook, you have to [create a pipeline first](https://docs.databricks.com/data-engineering/delta-live-tables/delta-live-tables-ui.html). 
+* Trigger the DLT pipeline. Although the pipeline is defined in the Twitter-Dataflow.sql notebook, you have to [create a pipeline first](https://docs.databricks.com/data-engineering/delta-live-tables/delta-live-tables-ui.html) to run it. 
 * Run the Twitter-SentimentAnalysis.py notebook
 
 
