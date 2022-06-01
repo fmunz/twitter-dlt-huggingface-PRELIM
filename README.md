@@ -6,7 +6,7 @@ DLT is the first ETL framework that uses a simple declarative approach to buildi
 
 ## The gist
 
-In this demo we are reading a live Twitter stream, ingesting the streaming data with schema detection, cleansing and transformating the data, and applying a bit of sentiment analysis to the tweets to classify them.
+In this demo we are reading a live Twitter stream, ingesting the streaming data with schema detection, cleansing and transforming the data, and applying a bit of sentiment analysis to the tweets to classify them.
 
 
 
