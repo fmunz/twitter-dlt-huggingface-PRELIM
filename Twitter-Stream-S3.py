@@ -7,14 +7,16 @@
 
 # COMMAND ----------
 
-# setup you twitter keys here
+# should use databricks secrets and the CLI to store and retrieve those keys in a safe way.
+#
+# for a first try, you can setup you twitter keys here
 consumer_key = "XXXX"
 consumer_secret = "XXXX"
 access_token = "XXX"
 access_token_secret = "XXXX"
 
-# in my demo, I include the keys reading in another notebooks from the cell below (which can be savely removed or commented out)
-# alternatively you could use databricks secrets and the CLI.
+# in my demo, I read in the keys from another notebook in the cell below (which can be savely removed or commented out)
+
 
 # COMMAND ----------
 
@@ -113,26 +115,38 @@ dbutils.notebook.exit("stop")
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC # Setup Utilities
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### create a DBFS directory, check for number of files, deletes a certain number of files ...
+
+# COMMAND ----------
+
+# create a directory to buffer the streamed data
+!mkdir "/dbfs/data/twitter_dataeng2"
+
+# COMMAND ----------
+
+# create a directory to buffer the streamed data
 !ls -l /dbfs/data/twitter_dataeng2 | wc
 
 # COMMAND ----------
 
-
 files = dbutils.fs.ls("/data/twitter_dataeng2")
+del = 400
 print(f'number of files: {len(files)}')
+print(f'number of files to delete: {del}')
 
-
-
-# COMMAND ----------
 
 for x, file in enumerate(files):
-  if x < 400 :
+  # delete n files from directory
+  if x < del :
     # print(x, file)
     dbutils.fs.rm(file.path)
 
     
+# use dbutils to copy over files... 
 # dbutils.fs.cp("/data/twitter_dataeng/" +f, "/data/twitter_dataeng2/")
-
-# COMMAND ----------
-
-!mkdir "/dbfs/data/twitter_dataeng2"
