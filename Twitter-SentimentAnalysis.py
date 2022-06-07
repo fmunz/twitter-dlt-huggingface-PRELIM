@@ -26,7 +26,7 @@ df = spark.read.format("delta").table("tweets.silver")
 
 # MAGIC %md
 # MAGIC 
-# MAGIC for more details about [Hugging Face](https://huggingface.co/) on Databricks, check out the [Datbricks blog posting](https://databricks.com/blog/2021/10/28/gpu-accelerated-sentiment-analysis-using-pytorch-and-huggingface-on-databricks.html)
+# MAGIC for more details about [Hugging Face](https://huggingface.co/) on Databricks, check out the [Databricks blog posting](https://databricks.com/blog/2021/10/28/gpu-accelerated-sentiment-analysis-using-pytorch-and-huggingface-on-databricks.html)
 
 # COMMAND ----------
 
@@ -53,7 +53,7 @@ sentiment_pipeline = pipeline(model="finiteautomata/bertweet-base-sentiment-anal
 
 sentiment_pipeline([" :-)",
                    "I love Lakehouses",
-                   "I do not like it"])
+                   "I do not like it", "WAVE training"])
 
 # COMMAND ----------
 

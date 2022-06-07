@@ -20,7 +20,7 @@ access_token_secret = "XXXX"
 
 # COMMAND ----------
 
-# MAGIC %run "./03R TwitterSetup"
+# MAGIC %run "./TwitterSetup"
 
 # COMMAND ----------
 
@@ -28,7 +28,7 @@ access_token_secret = "XXXX"
 
 # COMMAND ----------
 
-!pip install tweepy 
+!pip install tweepy jsonpickle
 
 # COMMAND ----------
 
@@ -67,7 +67,7 @@ class TweetStream(tweepy.Stream):
             print(f'retrieving tweet {self.text_count}: {status.text}')
 
         # how many tweets to batch into one file
-        if (self.text_count % 50 == 0):
+        if (self.text_count % 5 == 0):
             self.write_file()
             self.tweet_stack = []
 

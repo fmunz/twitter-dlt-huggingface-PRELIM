@@ -35,7 +35,7 @@ AS SELECT * FROM cloud_files(
 
 -- COMMAND ----------
 
-create or replace   live table silver 
+create or replace streaming  live table silver 
 
 (constraint valid_language expect (lang == "en") on violation drop row,
 constraint valid_id expect (id != "") on violation drop row)
@@ -44,7 +44,7 @@ comment 'data is cleansed - other languages than EN are dropped'
 
 
 as
-  select id, geo, lang, text from  (live.bronze)
+  select id, geo, lang, text from  stream (live.bronze)
 
 -- COMMAND ----------
 

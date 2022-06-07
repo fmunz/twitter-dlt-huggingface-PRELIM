@@ -1,6 +1,6 @@
 # 👋🏼 What is this Delta Live Table demo?
 
-I built this Delta Live Tables (DLT) demo to have a more realistic data engineering end-to end demo. 
+This Delta Live Tables (DLT) demo was built to have a more realistic data engineering end-to end demo. 
 DLT is the first ETL framework that uses a simple declarative approach to building reliable data pipelines and automatically manages your infrastructure at scale. Data analysts and engineers spend less time on tooling and can focus on getting value from data. With DLT, engineers are able to treat their **data as code** and apply **modern software engineering best practices** like testing, error handling, monitoring, and documentation to deploy reliable pipelines at scale.
 
 
