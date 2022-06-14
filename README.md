@@ -6,7 +6,7 @@ DLT is the first ETL framework that uses a simple declarative approach to buildi
 
 ## The gist
 
-In this demo we are reading a live Twitter stream, ingesting the streaming data with schema detection, cleansing and transforming the data, and applying a bit of sentiment analysis to the tweets to classify them.
+In this demo we are reading a live Twitter stream, ingesting the streaming data with schema detection, cleansing, and transforming the data, and applying a bit of sentiment analysis to the tweets to classify them.
 
 
 
@@ -16,11 +16,17 @@ In this demo we are reading a live Twitter stream, ingesting the streaming data 
 ## Ingredients
 ### 📔 The [Twitter-Stream-S3.py notebook](Twitter-Stream-S3.py) uses **[Tweepy](https://www.tweepy.org/)** 👩‍💻
 
-I use Tweepy for ingesting a live Twitter stream based on search criteria that can be defined, such as "DLT" and "data engineering". The ingested Twitter data is streamed to an S3 bucket. Just imagine this S3 bucket as your data lake. With Databricks, I can use DBFS to abstract the cloud object store as a folder (DBFS is multicloud, it will work the same on ADFS2 and GCS too)  
+I use Tweepy to ingest a live Twitter stream based on search criteria that can be defined, such as "DLT" and "data engineering". The ingested Twitter data is streamed to an S3 bucket. Just imagine this S3 bucket as your data lake. With Databricks, I can use DBFS to abstract the cloud object store as a folder (DBFS is multicloud, it will work the same on ADFS2 and GCS too)  
+
+```python
+# Filter realtime Tweets by keyword and language
+try:
+    tweet_stream.filter(languages=["en","de","es"], track=["DLT","Delta Live Tables"])
+```
 
 ### 📔 The [Twitter-Dataflow.sql notebook](Twitter-DataFlow.sql) uses **[Delta Live Tables](https://databricks.com/product/delta-live-tables) in SQL with Autoloader** 
 
-What matters in DLT is the "P" :-). "P" for "pipeline" as in dataflow. In this example DLT is used together with Databricks Autoloader. Autoloader ingests streaming data into the lakehouse and detects the schema. My DLT pipeline follows the [Medallion Architecture](https://databricks.com/glossary/medallion-architecture) and creates a Bronze table for the raw data, then filters the 40 columns per tweet and cleanses the data to ensure only tweets in English are contained in the Silver table. Ensuring data quality is done with SQL constraints (we like to call them Expectations in DLT lingo).   
+What matters most in "DLT" is the "P" :-). "P" as in "pipeline" or dataflow. In this example DLT is used together with Databricks Autoloader. Autoloader ingests streaming data into the lakehouse and detects the schema. My DLT pipeline follows the [Medallion Architecture](https://databricks.com/glossary/medallion-architecture) and creates a Bronze table for the raw data, then filters the 40 columns per tweet and cleanses the data to ensure only tweets in English are contained in the Silver table. Ensuring data quality is done with SQL constraints (we like to call them Expectations in DLT lingo).   
 
 <img src="https://raw.githubusercontent.com/fmunz/twitter-dlt-huggingface/main/markup/lineage.jpg" width="800">
 
@@ -36,7 +42,7 @@ For sentiment analysis, I picked Hugging Face (the Databricks platform is open a
 For a more advanced discussion of [Hugging Face with Databricks see the this blog](https://databricks.com/blog/2021/10/28/gpu-accelerated-sentiment-analysis-using-pytorch-and-huggingface-on-databricks.html). 
 
 
-### ✅ **Databricks Workflow**
+### ✅ **Databricks Workflows**
 
 If you have seen a recording of this demo, you will remember how I struggled to switch between the different notebooks for the Twitter Stream, DLT, and ML. Of course this needs to be automated! I am using Databricks Workflows for this and simply create three tasks: one for ingestion with the notebook that is using Tweepy, one task that runs the DLT pipeline, and a third task for the sentiment analysis. This is a workflow example that uses different task types, such as Python notebooks and DLT pipelines. 
 <img src="https://github.com/fmunz/twitter-dlt-huggingface/blob/main/markup/matrix.jpg?raw=true" width="800">
@@ -65,7 +71,8 @@ The features used in the notebooks were tested with the Databricks runtime DBR 1
 ### 🚀 Running the demo 
 * Run the Twitter-Stream-S3.py notebook that ingests data from Twitter, or make sure you have tweets from a previous run to process
 * Trigger the DLT pipeline. Note, that although the pipeline is defined in the Twitter-Dataflow.sql notebook, you have to [create a pipeline first](https://docs.databricks.com/data-engineering/delta-live-tables/delta-live-tables-ui.html) to run it. 
-* Run the Twitter-SentimentAnalysis.py notebook to check out the most positive tweet!
+* Run the Twitter-SentimentAnalysis.py notebook to check out the most positive tweets!
+* Explore what happens if the silver table is not a streaming DLT. 
 
 optional:
 * Create a simple Databricks Workflow as described above. Creating a workflow is easy, but it is not necessary if you just want to explore the notebooks manually. 
@@ -73,5 +80,6 @@ optional:
 
 ### 🤝 Feedback and contributing
 
-* I am happy to accept pull requests but please keep in mind that the focus of this demo is on DLT and simplicity. So I am not looking for more complexity in the ingestion or ML part, however I'd appreciate some cool visualizations of the final data. 
+* I am happy to accept pull requests but please keep in mind that the focus of this demo is on DLT and simplicity. So I am not looking for more complexity in the ML part, however I'd appreciate some cool visualizations of the final data. 
 * [Srijith](https://www.linkedin.com/in/srijith-rajamohan-ph-d-4242b9a/) provided a very first version of the Tweepy code. 
+* Follow me on twitter for more Data and AI: [@frankmunz](https://twitter.com/frankmunz). 
