@@ -7,12 +7,14 @@
 
 # COMMAND ----------
 
-# you should use databricks secrets and the CLI to store and retrieve those keys in a safe way.
+# this demo requires a bearer token from https://developer.twitter.com/en
 #
-# for a first try, you can setup your twitter bearer token here
+# use databricks secrets with the CLI to store and retrieve it in a safe way.
+# for a first try, you could configure your twitter bearer token here, but I recommend against doing so.
 bearer_token = "XXXX"
 
-# in my demo, I read in the keys from another notebook in the cell below (which can be savely removed or commented out)
+# in my demo, I read in the bearer from another notebook in the cell below (which can be savely removed or commented out)
+# note: Twitter API version 1 uses Twitter API keys, version 2 just a bearer token
 
 
 # COMMAND ----------
