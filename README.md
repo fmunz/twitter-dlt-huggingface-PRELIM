@@ -58,8 +58,8 @@ Use [Databricks Repos](https://docs.databricks.com/repos/index.html#clone-a-remo
 
 ### Requirements
 
-* Since the data is streamed live from twitter you have to create Twitter credentials. Ideally you should store them as a Databricks secret and read the from the Twitter-Stream-S3 notebook. Since I experiment a lot with this demo and I wanted to keep the code simple, I added the credentials directly but externalized this step into a separate notebook that is not on github.
-* Create a directory in DBFS to store the streamed tweets and change the code accordingly. The helper functions that I use for that are at the bottom of the Twitter-Stream-S3 notebook. 
+* Since the data is streamed live from twitter you have to create Twitter credentials. Ideally you should store them as a Databricks secret and read the from the Twitter-Stream-S3 notebook. Since I experiment a lot with this demo and I wanted to keep the code simple, I added the credentials directly but externalized this step into a separate notebook that is not on github. The demo uses Twitter API version 2 with a bearer token now.
+* Create a directory in DBFS to store the streamed tweets and change the code accordingly. The helper functions that I use for that are at the bottom of the Twitter-Stream-S3 notebook. The directory is also uses to read the tweets via autoloader, so you have to change that setting too. 
 * Define the Tweepy search expression to something that you enjoy. Note for the sake of this demo I include Spanish and German tweets. Later I use Delta Live Table expectations to ensure the ML pipeline will only be applied to EN tweets.
 * You can stop the data collection at any time if you like. The code will work with the existing tweets in the DBFS directory. 
 
