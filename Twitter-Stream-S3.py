@@ -2,18 +2,15 @@
 # MAGIC %md
 # MAGIC # TwitterStream to S3 / DBFS
 # MAGIC 
-# MAGIC * [DLT Pipeline](https://data-ai-lakehouse.cloud.databricks.com/?o=2847375137997282#joblist/pipelines/267b91c1-52f0-49e3-8b77-9a50b34f5d39)
-# MAGIC * [Huggingface Sentiment Analysis](https://data-ai-lakehouse.cloud.databricks.com/?o=2847375137997282#notebook/2328309019401991)
+# MAGIC * [DLT Pipeline](https://data-ai-lakehouse.cloud.databricks.com/?o=2847375137997282#joblist/pipelines/e5a33172-4c5c-459b-ab32-c9f3c720fcac)
+# MAGIC * [Huggingface Sentiment Analysis](https://data-ai-lakehouse.cloud.databricks.com/?o=2847375137997282#notebook/3842290145331470/command/3842290145331471)
 
 # COMMAND ----------
 
-# should use databricks secrets and the CLI to store and retrieve those keys in a safe way.
+# you should use databricks secrets and the CLI to store and retrieve those keys in a safe way.
 #
-# for a first try, you can setup you twitter keys here
-consumer_key = "XXXX"
-consumer_secret = "XXXX"
-access_token = "XXX"
-access_token_secret = "XXXX"
+# for a first try, you can setup your twitter bearer token here
+bearer_token = "XXXX"
 
 # in my demo, I read in the keys from another notebook in the cell below (which can be savely removed or commented out)
 
@@ -24,11 +21,11 @@ access_token_secret = "XXXX"
 
 # COMMAND ----------
 
-#!/databricks/python3/bin/python -m pip install --upgrade pip
+!/databricks/python3/bin/python -m pip install --upgrade pip
 
 # COMMAND ----------
 
-!pip install tweepy jsonpickle
+!pip install tweepy jsonpickle colorama
 
 # COMMAND ----------
 
@@ -38,34 +35,36 @@ import time
 import jsonpickle
 import sys
 
-
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_token_secret)
-
-api = tweepy.API(auth, wait_on_rate_limit=True, timeout=60)
-print(f'Twitter screen name: {api.verify_credentials().screen_name}')
+from colorama import Fore
+from colorama import Style
 
 
-# Subclass Stream  
-class TweetStream(tweepy.Stream):
+dbfs_dir = "/dbfs/data/twitter_summer2022"
 
-    def __init__(self, filename):
-        tweepy.Stream.__init__(self, consumer_key=consumer_key, consumer_secret=consumer_secret,
-                             access_token=access_token, access_token_secret=access_token_secret)
-        self.filename = filename
+# unlike V1 of the twitter API, V2 does not return all tweet attributes anylonger, so I added a few here for demo purposes
+fields = "lang,geo,author_id,conversation_id,created_at,referenced_tweets,reply_settings,source,in_reply_to_user_id,non_public_metrics,organic_metrics,public_metrics" 
+
+
+
+class myStream(tweepy.StreamingClient):
+
+    def __init__(self, bearer_token, dirname):
+        tweepy.StreamingClient.__init__(self,bearer_token)
+        self.dirname = dirname
         self.text_count = 0
         self.tweet_stack = []
 
 
-    def on_status(self, status):
-        #print('*'+status.text)
+    def on_tweet(self, tweet):
+        #print('*'+tweet.text)
         self.text_count = self.text_count + 1
-        self.tweet_stack.append(status)
+        self.tweet_stack.append(tweet)
     
         # when to print
         if (self.text_count % 1 == 0):
-            print(f'retrieving tweet {self.text_count}: {status.text}')
-
+            print(f"{Fore.BLUE}tweet {self.text_count} from stream:{Style.RESET_ALL} {tweet.text}")
+            #print(f'writing tweet: {Fore.RED}{jsonpickle.encode(tweet, unpicklable=False)}{Style.RESET_ALL}')
+            
         # how many tweets to batch into one file
         if (self.text_count % 5 == 0):
             self.write_file()
@@ -77,28 +76,27 @@ class TweetStream(tweepy.Stream):
 
     def write_file(self):
         file_timestamp = calendar.timegm(time.gmtime())
-        fname = self.filename + '/tweets_' + str(file_timestamp) + '.json'
-
-
-        f = open(fname, 'w')
-        for tweet in self.tweet_stack:
-            f.write(jsonpickle.encode(tweet._json, unpicklable=False) + '\n')
-        f.close()
-        print("Wrote local file ", fname)
-
+        fname = self.dirname + '/tweets_' + str(file_timestamp) + '.json'
+        print(f'{Fore.GREEN}writing tweets to:{Style.RESET_ALL} {fname}')
+        
+        with open(fname, 'w') as f:
+          for tweet in self.tweet_stack:
+            f.write(jsonpickle.encode(tweet, unpicklable=False) + '\n')
+            
     def on_error(self, status_code):
         print("Error with code ", status_code)
         sys.exit()
 
 
-# Initialize instance of the subclass
-tweet_stream = TweetStream("/dbfs/data/twitter_dataeng2")
-
-# Filter realtime Tweets by keyword
-try:
-    tweet_stream.filter(languages=["en","de","es"],track=["Databricks", "data science","AI/ML","data lake","machine learning","lakehouse","DLT","Delta Live Tables"])
 
 
+
+tweet_stream = myStream(bearer_token, dbfs_dir)
+try:  
+    # see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule
+    tweet_stream.add_rules(tweepy.StreamRule("DAIS2022 OR DLT OR Delta Live Tables OR Data Science OR Databricks "))
+    tweet_stream.filter(threaded=False, tweet_fields=fields)
+  
 
 except Exception as e:
     print("some error ", e)
@@ -120,33 +118,48 @@ dbutils.notebook.exit("stop")
 
 # COMMAND ----------
 
+# MAGIC %md 
+# MAGIC Create new data directory for tweets
+
+# COMMAND ----------
+
+# create a directory to buffer the streamed data
+!mkdir "/dbfs/data/twitter_summer2022"
+
+# COMMAND ----------
+
+# MAGIC %md 
+# MAGIC Number of files, -> small files problem, DLT solves it (check with Data Explorer)
+
+# COMMAND ----------
+
+# create a directory to buffer the streamed data
+!ls -l /dbfs/data/twitter_summer2022 | wc
+
+# COMMAND ----------
+
 # MAGIC %md
-# MAGIC ### create a DBFS directory, check for number of files, deletes a certain number of files ...
+# MAGIC 
+# MAGIC Delete n files from DBFS directory to trim down demo
 
 # COMMAND ----------
 
-# create a directory to buffer the streamed data
-!mkdir "/dbfs/data/twitter_dataeng2"
-
-# COMMAND ----------
-
-# create a directory to buffer the streamed data
-!ls -l /dbfs/data/twitter_dataeng2 | wc
-
-# COMMAND ----------
-
-files = dbutils.fs.ls("/data/twitter_dataeng2")
-del = 400
+files = dbutils.fs.ls("/data/twitter_summer2022")
+d = 500
 print(f'number of files: {len(files)}')
-print(f'number of files to delete: {del}')
+print(f'number of files to delete: {d}')
 
 
 for x, file in enumerate(files):
   # delete n files from directory
-  if x < del :
+  if x < d :
     # print(x, file)
     dbutils.fs.rm(file.path)
 
     
 # use dbutils to copy over files... 
 # dbutils.fs.cp("/data/twitter_dataeng/" +f, "/data/twitter_dataeng2/")
+
+# COMMAND ----------
+
+

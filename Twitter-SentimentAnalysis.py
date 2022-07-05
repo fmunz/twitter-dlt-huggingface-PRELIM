@@ -15,7 +15,7 @@
 
 # COMMAND ----------
 
-df = spark.read.format("delta").table("tweets.silver")
+df = spark.read.format("delta").table("tweets_summer.silver")
 
 # COMMAND ----------
 
@@ -42,18 +42,21 @@ tweets = df.toPandas()
 # default model for analysis is "sentiment-analysis"
 # but "finiteautomata/bertweet-base-sentiment-analysis" is even better tuned or tweets! 
 
-sentiment_pipeline = pipeline(model="finiteautomata/bertweet-base-sentiment-analysis")
+#sentiment_pipeline = pipeline(model="finiteautomata/bertweet-base-sentiment-analysis")
+sentiment_pipeline = pipeline(task="sentiment-analysis")
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Check it out!
+# MAGIC Check it out! this is how SA would work with a small list
 
 # COMMAND ----------
 
 sentiment_pipeline([" :-)",
-                   "I love Lakehouses",
-                   "I do not like it", "WAVE training"])
+                   "not good at all",
+                   "I love the Lakehouses"
+                   
+                   ])
 
 # COMMAND ----------
 
@@ -66,16 +69,20 @@ tweets = pd.concat([tweets, pd.DataFrame(sentiments)], axis=1)
 
 # COMMAND ----------
 
+tweets
+
+# COMMAND ----------
+
 # most positive tweets 
 #pd.set_option('display.max_colwidth', None)  
-tweets.query('label == "POS"').sort_values(by=['score'], ascending=False)[:15]
+tweets.query('label == "POSITIVE"').sort_values(by=['score'], ascending=False)[:15]
 
 # COMMAND ----------
 
 # most neg tweets 
 # pd.set_option('display.max_colwidth', None)  
 
-# tweets.query('label == "NEG"').sort_values(by=['score'], ascending=False)[:5].text
+# tweets.query('label == "NEGATIVE"').sort_values(by=['score'], ascending=False)[:5].text
 
 # COMMAND ----------
 
@@ -111,23 +118,21 @@ sentiment_counts.plot.pie(ax=ax, autopct='%1.1f%%',  fontsize=12, label="")
 
 # MAGIC %md
 # MAGIC 
-# MAGIC ## Languages ...
+# MAGIC ## Non-english Languages ...
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC -- there should be only EN in tweets.silver
 # MAGIC 
-# MAGIC select lang, count(*) from tweets.silver group by lang
+# MAGIC select * from tweets_summer.languages where lang <> "en" sort by count desc
 
 # COMMAND ----------
 
 # MAGIC %md 
-# MAGIC 
-# MAGIC ## Geolocation
+# MAGIC # Ressources
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC 
-# MAGIC select geo  from tweets.silver where geo is not null  limit 25
+# MAGIC %md 
+# MAGIC * Hugging Face with Databricks [blog](https://databricks.com/blog/2021/10/28/gpu-accelerated-sentiment-analysis-using-pytorch-and-huggingface-on-databricks.html)
+# MAGIC * DAIS 2022 recording of this demo (tbd)
