@@ -19,9 +19,9 @@ In this demo we are reading a live Twitter stream, ingesting the streaming data 
 I use Tweepy to ingest a live Twitter stream based on search criteria that can be defined, such as "DLT" and "data engineering". The ingested Twitter data is streamed to an S3 bucket. Just imagine this S3 bucket as your data lake. With Databricks, I can use DBFS to abstract the cloud object store as a folder (DBFS is multicloud, it will work the same on ADFS2 and GCS too)  
 
 ```python
-# Filter realtime Tweets by keyword and language
-try:
-    tweet_stream.filter(languages=["en","de","es"], track=["DLT","Delta Live Tables"])
+try:  
+    # see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule
+    tweet_stream.add_rules(tweepy.StreamRule("DAIS2022 OR DLT OR Delta Live Tables OR Data Science OR Databricks "))
 ```
 
 ### 📔 The [Twitter-Dataflow.sql notebook](Twitter-DataFlow.sql) uses **[Delta Live Tables](https://databricks.com/product/delta-live-tables) in SQL with Autoloader** 
@@ -58,6 +58,7 @@ Use [Databricks Repos](https://docs.databricks.com/repos/index.html#clone-a-remo
 
 ### Requirements
 
+* Make sure you understand the [basics of Delta Live Tables](https://docs.databricks.com/data-engineering/delta-live-tables/index.html), this demo is not a Getting Started guide. 
 * Since the data is streamed live from twitter you have to create Twitter credentials. Ideally you should store them as a Databricks secret and read the from the Twitter-Stream-S3 notebook. Since I experiment a lot with this demo and I wanted to keep the code simple, I added the credentials directly but externalized this step into a separate notebook that is not on github. The demo uses Twitter API version 2 with a bearer token now.
 * Create a directory in DBFS to store the streamed tweets and change the code accordingly. The helper functions that I use for that are at the bottom of the Twitter-Stream-S3 notebook. The directory is also uses to read the tweets via autoloader, so you have to change that setting too. 
 * Define the Tweepy search expression to something that you enjoy. Note for the sake of this demo I include Spanish and German tweets. Later I use Delta Live Table expectations to ensure the ML pipeline will only be applied to EN tweets.
