@@ -78,6 +78,7 @@ The features used in the notebooks were tested with the Databricks runtime DBR 1
 optional:
 * Create a simple Databricks Workflow as described above. Creating a workflow is easy, but it is not necessary if you just want to explore the notebooks manually.
 * Explore what happens when you change the silver table to a non-streaming table and refresh the data. The silver table will be fully computed every time. 
+* In the Databricks Workspace, change to the SQL persona/view. Explore the languages table from the SQL editor.
 
 
 ### 🤝 Feedback and contributing

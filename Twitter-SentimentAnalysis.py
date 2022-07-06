@@ -69,10 +69,6 @@ tweets = pd.concat([tweets, pd.DataFrame(sentiments)], axis=1)
 
 # COMMAND ----------
 
-tweets
-
-# COMMAND ----------
-
 # most positive tweets 
 #pd.set_option('display.max_colwidth', None)  
 tweets.query('label == "POSITIVE"').sort_values(by=['score'], ascending=False)[:15]
