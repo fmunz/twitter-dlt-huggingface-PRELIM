@@ -1,4 +1,0 @@
-# Databricks notebook source
-# bearer_token for twitter
-bearer_token = "AAAAAAAAAAAAAAAAAAAAAOBOaAEAAAAAQSEyTPyCE6WM7byJMGApGh%2FKVHA%3DB04inEqa1fw1ByOtcKRMpNd9dZ6UbxrBEHKVruQRFfKRhjCUAG"
-
