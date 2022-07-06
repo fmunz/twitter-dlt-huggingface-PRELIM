@@ -48,7 +48,7 @@ sentiment_pipeline = pipeline(task="sentiment-analysis")
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Check it out! this is how SA would work with a small list
+# MAGIC Check it out! this is how SA works with a small, hard-coded list
 
 # COMMAND ----------
 
