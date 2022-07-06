@@ -19,8 +19,7 @@ bearer_token = "XXXX"
 
 # COMMAND ----------
 
-# remove this cell (used to set my Twitter token)
-%run "./TwitterSetup"
+# MAGIC %run "./TwitterSetup"
 
 # COMMAND ----------
 
