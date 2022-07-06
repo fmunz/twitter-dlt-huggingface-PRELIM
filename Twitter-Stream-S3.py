@@ -7,7 +7,7 @@
 
 # COMMAND ----------
 
-# this demo requires a bearer token from https://developer.twitter.com/en
+# this demo requires a bearer token for Twitter from https://developer.twitter.com/en
 #
 # use databricks secrets with the CLI to store and retrieve it in a safe way.
 # for a first try, you could configure your twitter bearer token here, but I recommend against doing so.
@@ -19,7 +19,8 @@ bearer_token = "XXXX"
 
 # COMMAND ----------
 
-# MAGIC %run "./TwitterSetup"
+# remove this cell (used to set my Twitter token)
+%run "./TwitterSetup"
 
 # COMMAND ----------
 
@@ -43,20 +44,22 @@ from colorama import Style
 
 dbfs_dir = "/dbfs/data/twitter_summer2022"
 
-# unlike V1 of the twitter API, V2 does not return all tweet attributes anylonger, so I added a few here for demo purposes
+# unlike V1 of the twitter API, V2 does not return all tweet attributes anylonger, so for demo purposes I added a few here 
 fields = "lang,geo,author_id,conversation_id,created_at,referenced_tweets,reply_settings,source,in_reply_to_user_id,non_public_metrics,organic_metrics,public_metrics" 
 
 
-
+# subclass StreamingClient
 class myStream(tweepy.StreamingClient):
 
+    # initializer
     def __init__(self, bearer_token, dirname):
         tweepy.StreamingClient.__init__(self,bearer_token)
         self.dirname = dirname
         self.text_count = 0
         self.tweet_stack = []
 
-
+        
+    # called for every tweet
     def on_tweet(self, tweet):
         #print('*'+tweet.text)
         self.text_count = self.text_count + 1
@@ -95,7 +98,9 @@ class myStream(tweepy.StreamingClient):
 
 tweet_stream = myStream(bearer_token, dbfs_dir)
 try:  
+    # filter stream
     # see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule
+    #
     tweet_stream.add_rules(tweepy.StreamRule("DAIS2022 OR DLT OR Delta Live Tables OR Data Science OR Databricks "))
     tweet_stream.filter(threaded=False, tweet_fields=fields)
   
