@@ -76,11 +76,13 @@ The features used in the notebooks were tested with the Databricks runtime DBR 1
 * Explore what happens if the silver table is not a streaming DLT. 
 
 optional:
-* Create a simple Databricks Workflow as described above. Creating a workflow is easy, but it is not necessary if you just want to explore the notebooks manually. 
+* Create a simple Databricks Workflow as described above. Creating a workflow is easy, but it is not necessary if you just want to explore the notebooks manually.
+* Explore what happens when you change the silver table to a non-streaming table and refresh the data. The silver table will be fully computed every time. 
 
 
 ### 🤝 Feedback and contributing
 
+* This demo is provided "as is". Please join the [Databricks Community Forum](https://community.databricks.com/) for technical questions and discussions
 * I am happy to accept pull requests but please keep in mind that the focus of this demo is on DLT and simplicity. So I am not looking for more complexity in the ML part, however I'd appreciate some cool visualizations of the final data. 
 * [Srijith](https://www.linkedin.com/in/srijith-rajamohan-ph-d-4242b9a/) provided a very first version of the Tweepy code. 
 * Follow me on twitter for more Data and AI: [@frankmunz](https://twitter.com/frankmunz). 
