@@ -95,13 +95,27 @@ class myStream(tweepy.StreamingClient):
 
 
 
-tweet_stream = myStream(bearer_token, dbfs_dir)
+stream = myStream(bearer_token, dbfs_dir)
 try:  
     # filter stream
     # see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule
     #
-    tweet_stream.add_rules(tweepy.StreamRule("DAIS2022 OR DLT OR Delta Live Tables OR Data Science OR Databricks "))
-    tweet_stream.filter(threaded=False, tweet_fields=fields)
+    my_rule = '''(DataAISummit OR Databricks OR Lakehouse OR Photon OR Lightspeed) (lang:en OR lang:es)'''
+    
+    
+    rules = stream.get_rules()
+    #print(f"rules when starting: {rules}")
+    if rules.data != None:
+      for r in rules.data:
+        stream.delete_rules(r.id)
+      #print(f"rules cleaned: {stream.get_rules()}")
+    
+    
+    new_rule = stream.add_rules(tweepy.StreamRule(my_rule))
+    #print(f"setting rule: {new_rule}")
+    
+    print(f"rules set: {stream.get_rules()}")
+    stream.filter(threaded=False, tweet_fields=fields)
   
 
 except Exception as e:
@@ -140,7 +154,7 @@ dbutils.notebook.exit("stop")
 # COMMAND ----------
 
 # create a directory to buffer the streamed data
-!ls -l /dbfs/data/twitter_summer2022 | wc
+!ls -l /dbfs/data/twitter_summer2022 | wc -l
 
 # COMMAND ----------
 
