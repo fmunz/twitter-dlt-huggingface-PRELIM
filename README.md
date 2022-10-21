@@ -1,3 +1,7 @@
+# DO NOT USE THIS
+
+I created this as an experiment to play with Twitter V2, but the demo lost all it's simplicity. I highly recommend to use [demo](https://github.com/fmunz/fmunz-twitter-dlt-huggingface-v1) instead. 
+
 # 👋🏼 What is this Delta Live Table demo?
 
 This Delta Live Tables (DLT) demo was built to have a more realistic data engineering end-to end demo. 
